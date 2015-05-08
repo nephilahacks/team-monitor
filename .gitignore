@@ -2,5 +2,8 @@
 node_modules
 teamonitor/public/components/
 
+#Log
+npm-debug.log
+
 # System
 *.DS_Store
