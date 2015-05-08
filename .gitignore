@@ -1,2 +1,6 @@
+# Dependencies
 node_modules
+teamonitor/public/components/
+
+# System
 *.DS_Store
