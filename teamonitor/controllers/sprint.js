@@ -11,7 +11,7 @@ var SprintSchema  = require('../models/sprint');
     CORE STUFF: SPRINT
 =============================================================== */
 
-function create(json, res) {
+function create(json, cb) {
 
     var sprint = new SprintSchema ({
         index: json.index,
@@ -19,18 +19,18 @@ function create(json, res) {
 
     SprintSchema.findOne({ 'index': json.index }, function (err, saved_sprint) {
         if (err) {
-            res.send({'error': err});
+            cb(err);
         } else {
             if (!saved_sprint) {
                 sprint.save(function (err, sprint) {
                     if (err) {
-                        res.send({'error': err});
+                        cb(err);
                     } else {
-                        res.send(sprint);
+                        cb(null, sprint);
                     }
                 });
             } else {
-                res.send(saved_sprint);
+                cb(null, saved_sprint);
             }
         }
     });

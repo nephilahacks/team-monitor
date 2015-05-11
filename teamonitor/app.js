@@ -42,7 +42,13 @@ app.use('/', routes);
 app.use('/users', users);
 
 app.post('/sprints', function (req, res) {
-  sprints.create(req.body, res);
+  sprints.create(req.body, function (err, sprint){
+    if (err) {
+      res.send({'error': err});
+    } else {
+      res.send(sprint);
+    }
+  });
 })
 
 // catch 404 and forward to error handler
