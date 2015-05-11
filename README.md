@@ -7,3 +7,7 @@ Team metrics sprint review
     $ cd teamonitor/
     $ npm install
     $ bower install
+
+## Run
+
+    $ node app.js
