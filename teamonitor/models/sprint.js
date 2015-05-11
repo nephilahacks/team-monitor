@@ -14,12 +14,12 @@ var ObjectId = Schema.ObjectId;
 
 
 var sprintSchema = new Schema ({
-    index: {
-        type: Number,
-        default: 0
-    },
-    votes: [Number],
-    voters: [String],
+  index: {
+    type: Number,
+    default: 0
+  },
+  votes: [Number],
+  voters: [String],
 });
 
 

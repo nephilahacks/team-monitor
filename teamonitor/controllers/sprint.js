@@ -13,27 +13,27 @@ var SprintSchema  = require('../models/sprint');
 
 function create(json, cb) {
 
-    var sprint = new SprintSchema ({
-        index: json.index,
-    });
+  var sprint = new SprintSchema ({
+    index: json.index,
+  });
 
-    SprintSchema.findOne({ 'index': json.index }, function (err, saved_sprint) {
-        if (err) {
+  SprintSchema.findOne({ 'index': json.index }, function (err, saved_sprint) {
+    if (err) {
+      cb(err);
+    } else {
+      if (!saved_sprint) {
+        sprint.save(function (err, sprint) {
+          if (err) {
             cb(err);
-        } else {
-            if (!saved_sprint) {
-                sprint.save(function (err, sprint) {
-                    if (err) {
-                        cb(err);
-                    } else {
-                        cb(null, sprint);
-                    }
-                });
-            } else {
-                cb(null, saved_sprint);
-            }
-        }
-    });
+          } else {
+            cb(null, sprint);
+          }
+        });
+      } else {
+        cb(null, saved_sprint);
+      }
+    }
+  });
 }
 
 /* ===============================================================
