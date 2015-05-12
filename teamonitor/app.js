@@ -40,7 +40,8 @@ app.use('/', routes);
 app.use('/users', users);
 
 app.post('/sprints', function (req, res) {
-  sprints.create(req.body, function (err, sprint){
+  sprints.create(req.body, function (err, sprint, code){
+    res.status(code);
     if (err) {
       res.send({'error': err});
     } else {
@@ -51,7 +52,8 @@ app.post('/sprints', function (req, res) {
 
 app.post('/sprints/:sprintid/vote', function (req, res) {
   var sprintid = req.params.sprintid;
-  sprints.vote(sprintid, req.body, function (err, sprint){
+  sprints.vote(sprintid, req.body, function (err, sprint, code){
+    res.status(code);
     if (err) {
       res.send({'error': err});
     } else {
@@ -62,7 +64,8 @@ app.post('/sprints/:sprintid/vote', function (req, res) {
 
 app.get('/sprints', function (req, res) {
   var sprintid = req.params.sprintid;
-  sprints.all(function (err, sprints){
+  sprints.all(function (err, sprints, code){
+    res.status(code);
     if (err) {
       res.send({'error': err});
     } else {
@@ -73,7 +76,8 @@ app.get('/sprints', function (req, res) {
 
 app.get('/sprints/:sprintid', function (req, res) {
   var sprintid = req.params.sprintid;
-  sprints.query({'index' : sprintid}, function (err, sprint){
+  sprints.query({'index' : sprintid}, function (err, sprint, code){
+    res.status(code);
     if (err) {
       res.send({'error': err});
     } else {

@@ -19,7 +19,7 @@ function create(json, cb) {
 
   SprintSchema.findOne({ 'index': json.index }, function (err, saved_sprint) {
     if (err) {
-      cb(err);
+      cb(err, null, 500);
     } else {
       if (!saved_sprint) {
         if (sprint.votes.length == 0) {
@@ -28,13 +28,13 @@ function create(json, cb) {
         sprint.markModified('votes');
         sprint.save(function (err, sprint) {
           if (err) {
-            cb(err);
+            cb(err, null, 500);
           } else {
-            cb(null, sprint);
+            cb(null, sprint, 201);
           }
         });
       } else {
-        cb(null, saved_sprint);
+        cb(null, saved_sprint, 200);
       }
     }
   });
@@ -43,7 +43,7 @@ function create(json, cb) {
 function vote(sprintid, payload, cb) {
   SprintSchema.findOne({ 'index': sprintid }, function (err, sprint) {
     if (err) {
-      cb(err);
+      cb(err, null, 500);
     } else {
       if (sprint) {
         for (var i = 0 ; i < sprint.votes.length ; i++) {
@@ -52,13 +52,17 @@ function vote(sprintid, payload, cb) {
         sprint.markModified('votes');
         sprint.save(function (err, sprint) {
           if (err) {
-            cb(err);
+            cb(err, null, 500);
           } else {
-            cb(null, sprint);
+            cb(null, sprint, 200);
           }
         });
       } else {
-        cb({'error':'sprint ' + sprintid + ' doesn\'t exist'}, null);
+        cb(
+          {'error':'sprint ' + sprintid + ' doesn\'t exist'},
+          null,
+          404
+        );
       }
     }
   });
@@ -67,12 +71,16 @@ function vote(sprintid, payload, cb) {
 function query(query, cb) {
   SprintSchema.findOne(query, '-_id index voters votes', function (err, sprint) {
     if (err) {
-      cb(err);
+      cb(err, null, 500);
     } else {
       if (sprint) {
-        cb(null, sprint);
+        cb(null, sprint, 200);
       } else {
-        cb({'error':'sprint with ' + JSON.stringify(query) + ' doesn\'t exist'}, null);
+        cb(
+          {'error':'sprint with ' + JSON.stringify(query) + ' doesn\'t exist'},
+          null,
+          404
+        );
       }
     }
   });
@@ -81,12 +89,12 @@ function query(query, cb) {
 function all(cb) {
   SprintSchema.find({}, '-_id index voters votes', function (err, sprints) {
     if (err) {
-      cb(err);
+      cb(err, null, 500);
     } else {
       if (sprints) {
-        cb(null, sprints);
+        cb(null, sprints, 200);
       } else {
-        cb({'error':'sprints don\'t exist'}, null);
+        cb({'error':'sprints don\'t exist'}, null, 404);
       }
     }
   });
