@@ -64,9 +64,39 @@ function vote(sprintid, payload, cb) {
   });
 }
 
+function query(query, cb) {
+  SprintSchema.findOne(query, '-_id index voters votes', function (err, sprint) {
+    if (err) {
+      cb(err);
+    } else {
+      if (sprint) {
+        cb(null, sprint);
+      } else {
+        cb({'error':'sprint with ' + JSON.stringify(query) + ' doesn\'t exist'}, null);
+      }
+    }
+  });
+}
+
+function all(cb) {
+  SprintSchema.find({}, '-_id index voters votes', function (err, sprints) {
+    if (err) {
+      cb(err);
+    } else {
+      if (sprints) {
+        cb(null, sprints);
+      } else {
+        cb({'error':'sprints don\'t exist'}, null);
+      }
+    }
+  });
+}
+
 /* ===============================================================
     EXPORTS
 =============================================================== */
 
 module.exports.create = create;
 module.exports.vote = vote;
+module.exports.query = query;
+module.exports.all = all;

@@ -60,6 +60,28 @@ app.post('/sprints/:sprintid/vote', function (req, res) {
   });
 })
 
+app.get('/sprints', function (req, res) {
+  var sprintid = req.params.sprintid;
+  sprints.all(function (err, sprints){
+    if (err) {
+      res.send({'error': err});
+    } else {
+      res.send(sprints);
+    }
+  });
+})
+
+app.get('/sprints/:sprintid', function (req, res) {
+  var sprintid = req.params.sprintid;
+  sprints.query({'index' : sprintid}, function (err, sprint){
+    if (err) {
+      res.send({'error': err});
+    } else {
+      res.send(sprint);
+    }
+  });
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
