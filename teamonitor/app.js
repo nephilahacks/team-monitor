@@ -49,6 +49,17 @@ app.post('/sprints', function (req, res) {
   });
 })
 
+app.post('/sprints/:sprintid/vote', function (req, res) {
+  var sprintid = req.params.sprintid;
+  sprints.vote(sprintid, req.body, function (err, sprint){
+    if (err) {
+      res.send({'error': err});
+    } else {
+      res.send(sprint);
+    }
+  });
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

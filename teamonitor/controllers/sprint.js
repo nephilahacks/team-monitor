@@ -22,6 +22,10 @@ function create(json, cb) {
       cb(err);
     } else {
       if (!saved_sprint) {
+        if (sprint.votes.length == 0) {
+          for (var i = 0 ; i < 8 ; i++) sprint.votes.push(0);
+        }
+        sprint.markModified('votes');
         sprint.save(function (err, sprint) {
           if (err) {
             cb(err);
@@ -36,8 +40,33 @@ function create(json, cb) {
   });
 }
 
+function vote(sprintid, payload, cb) {
+  SprintSchema.findOne({ 'index': sprintid }, function (err, sprint) {
+    if (err) {
+      cb(err);
+    } else {
+      if (sprint) {
+        for (var i = 0 ; i < sprint.votes.length ; i++) {
+          sprint.votes[i] = sprint.votes[i] + payload.votes[i]
+        }
+        sprint.markModified('votes');
+        sprint.save(function (err, sprint) {
+          if (err) {
+            cb(err);
+          } else {
+            cb(null, sprint);
+          }
+        });
+      } else {
+        cb({'error':'sprint ' + sprintid + ' doesn\'t exist'}, null);
+      }
+    }
+  });
+}
+
 /* ===============================================================
     EXPORTS
 =============================================================== */
 
 module.exports.create = create;
+module.exports.vote = vote;
