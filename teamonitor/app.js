@@ -6,10 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-var sprints = require('./controllers/sprint');
+var sprints = require('./routes/sprints');
 
 var app = express();
 
@@ -36,55 +33,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
-
-app.post('/sprints', function (req, res) {
-  sprints.create(req.body, function (err, sprint, code){
-    res.status(code);
-    if (err) {
-      res.send({'error': err});
-    } else {
-      res.send(sprint);
-    }
-  });
-})
-
-app.post('/sprints/:sprintid/vote', function (req, res) {
-  var sprintid = req.params.sprintid;
-  sprints.vote(sprintid, req.body, function (err, sprint, code){
-    res.status(code);
-    if (err) {
-      res.send({'error': err});
-    } else {
-      res.send(sprint);
-    }
-  });
-})
-
-app.get('/sprints', function (req, res) {
-  var sprintid = req.params.sprintid;
-  sprints.all(function (err, sprints, code){
-    res.status(code);
-    if (err) {
-      res.send({'error': err});
-    } else {
-      res.send(sprints);
-    }
-  });
-})
-
-app.get('/sprints/:sprintid', function (req, res) {
-  var sprintid = req.params.sprintid;
-  sprints.query({'index' : sprintid}, function (err, sprint, code){
-    res.status(code);
-    if (err) {
-      res.send({'error': err});
-    } else {
-      res.send(sprint);
-    }
-  });
-})
+app.use('/sprints', sprints);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
