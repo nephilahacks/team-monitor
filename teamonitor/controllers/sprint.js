@@ -6,6 +6,7 @@
 var mongoose        = require('mongoose');
 var database        = require('../config/database');
 var SprintSchema  = require('../models/sprint');
+var VoteSchema  = require('../models/vote');
 
 /* ===============================================================
     CORE STUFF: SPRINT
@@ -22,10 +23,6 @@ function create(json, cb) {
       cb(err, null, 500);
     } else {
       if (!saved_sprint) {
-        if (sprint.votes.length == 0) {
-          for (var i = 0 ; i < 8 ; i++) sprint.votes.push(0);
-        }
-        sprint.markModified('votes');
         sprint.save(function (err, sprint) {
           if (err) {
             cb(err, null, 500);
@@ -41,20 +38,23 @@ function create(json, cb) {
 }
 
 function vote(sprintid, payload, cb) {
+
+  var vote = new VoteSchema ({
+    sprint: sprintid,
+    votes: payload
+  });
+
   SprintSchema.findOne({ 'index': sprintid }, function (err, sprint) {
     if (err) {
       cb(err, null, 500);
     } else {
       if (sprint) {
-        for (var i = 0 ; i < sprint.votes.length ; i++) {
-          sprint.votes[i] = sprint.votes[i] + payload.votes[i]
-        }
-        sprint.markModified('votes');
-        sprint.save(function (err, sprint) {
+        vote.markModified('votes');
+        vote.save(function (err, vote) {
           if (err) {
             cb(err, null, 500);
           } else {
-            cb(null, sprint, 200);
+            cb(null, vote, 201);
           }
         });
       } else {
@@ -69,7 +69,7 @@ function vote(sprintid, payload, cb) {
 }
 
 function query(query, cb) {
-  SprintSchema.findOne(query, '-_id index voters votes', function (err, sprint) {
+  SprintSchema.findOne(query, '-_id index voters', function (err, sprint) {
     if (err) {
       cb(err, null, 500);
     } else {

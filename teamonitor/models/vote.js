@@ -13,14 +13,11 @@ var ObjectId = Schema.ObjectId;
 =============================================================== */
 
 
-var sprintSchema = new Schema ({
-  index: {
-    type: Number,
-    default: 0
-  },
-  voters: [String],
+var voteSchema = new Schema ({
+  sprint: Number,
+  votes: {happy:[Number], neutral:[Number], unhappy:[Number]},
 });
 
 
-var SprintSchema = mongoose.model('SprintSchema', sprintSchema, 'sprint');
-module.exports = SprintSchema;
+var VoteSchema = mongoose.model('VoteSchema', voteSchema, 'vote');
+module.exports = VoteSchema;
