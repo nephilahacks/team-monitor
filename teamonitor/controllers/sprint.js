@@ -68,13 +68,39 @@ function vote(sprintid, payload, cb) {
   });
 }
 
+function sumVotes(sprint_id, cb) {
+  VoteSchema.find({'sprint' : sprint_id}, function (err, votes) {
+    sum = {
+      "happy":[0,0,0,0,0,0,0,0],
+      "neutral":[0,0,0,0,0,0,0,0],
+      "unhappy":[0,0,0,0,0,0,0,0]
+    };
+    for (var i = 0 ; i < votes.length ; i++) {
+      for (var j = 0 ; j < votes[i].votes.happy.length; j++) {
+        sum.happy[j] += votes[i].votes.happy[j];
+      }
+      for (var j = 0 ; j < votes[i].votes.neutral.length; j++) {
+        sum.neutral[j] += votes[i].votes.neutral[j];
+      }
+      for (var j = 0 ; j < votes[i].votes.unhappy.length; j++) {
+        sum.unhappy[j] += votes[i].votes.unhappy[j];
+      }
+    }
+    cb(sum);
+  });
+}
+
 function query(query, cb) {
   SprintSchema.findOne(query, '-_id index voters', function (err, sprint) {
     if (err) {
       cb(err, null, 500);
     } else {
       if (sprint) {
-        cb(null, sprint, 200);
+        sumVotes(sprint.index, function(sum) {
+          sprint_obj = sprint.toObject();
+          sprint_obj['votes'] = sum;
+          cb(null, sprint_obj, 200);
+        });
       } else {
         cb(
           {'error':'sprint with ' + JSON.stringify(query) + ' doesn\'t exist'},
