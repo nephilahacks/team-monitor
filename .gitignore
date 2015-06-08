@@ -2,6 +2,11 @@
 node_modules
 teamonitor/public/components/
 
+# Generated stuff
+*.css
+*.min.js
+.sass-cache/
+
 #Log
 npm-debug.log
 
