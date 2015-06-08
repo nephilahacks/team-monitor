@@ -1,0 +1,7 @@
+# System
+*.DS_Store
+
+# Generated stuff
+*.css
+*.min.js
+.sass-cache/
