@@ -39,6 +39,11 @@ app.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+app.get('/partials/:name', function (req, res) {
+  var name = req.params.name;
+  res.render('partials/' + name);
+});
+
 app.use(apiEndpoint + '/sprints', sprints);
 
 // catch 404 and forward to error handler
