@@ -1,4 +1,4 @@
-var http      = require('http');
+var http = require('http');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,6 +9,8 @@ var bodyParser = require('body-parser');
 var sprints = require('./routes/sprints');
 
 var app = express();
+
+var apiEndpoint = '/api/v1'
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,7 +35,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/sprints', sprints);
+app.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+
+app.use(apiEndpoint + '/sprints', sprints);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
