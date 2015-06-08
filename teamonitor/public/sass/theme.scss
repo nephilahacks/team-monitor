@@ -1,0 +1,47 @@
+
+header {
+
+  background-color: #00709e;
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+}
+
+header img {
+  float: left;
+  max-height: 100px;
+}
+
+.header-label,
+.canvas-label {
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.header-label {
+  color: #fff;
+  float: right;
+  margin-right: 40px;
+}
+
+.canvas-label {
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 15px;
+  width: auto;
+  margin-left: 28px;
+}
+
+#main-wrapper,
+.canvas-chart {
+  margin: 0 auto;
+  margin-top: 40px;
+  width: 95%;
+}
+
+.canvas-chart {
+  margin-bottom: 40px;
+}
