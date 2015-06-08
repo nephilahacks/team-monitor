@@ -1,8 +1,14 @@
 doctype html
-html
+html(ng-app="teamMonitorApp")
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title="Sprint monitor"
+    link(rel='stylesheet', href='/stylesheets/reset.css')
+    link(rel='stylesheet', href='/stylesheets/theme.css')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext')
     script(src='/components/angular/angular.min.js')
+    script(src='/components/angular-route/angular-route.min.js')
+    script(src='/components/Chart.js/Chart.min.js')
+    script(src='/js/controllers.js')
+    script(src='/js/app.js')
   body
     block content
