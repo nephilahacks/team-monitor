@@ -18,6 +18,14 @@ var sprintSchema = new Schema ({
     type: Number,
     default: 0
   },
+  promised: {
+    type: Number,
+    default: 0
+  },
+  closed: {
+    type: Number,
+    default: 0
+  },
   voters: [String],
 });
 

@@ -91,7 +91,7 @@ function sumVotes(sprint_id, cb) {
 }
 
 function query(query, cb) {
-  SprintSchema.findOne(query, '-_id index voters', function (err, sprint) {
+  SprintSchema.findOne(query, '-_id index voters promised closed', function (err, sprint) {
     if (err) {
       cb(err, null, 500);
     } else {
@@ -113,7 +113,7 @@ function query(query, cb) {
 }
 
 function all(cb) {
-  SprintSchema.find({}, '-_id index voters votes', function (err, sprints) {
+  SprintSchema.find({}, '-_id index voters votes promised closed', function (err, sprints) {
     if (err) {
       cb(err, null, 500);
     } else {
