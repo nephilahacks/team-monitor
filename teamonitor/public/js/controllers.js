@@ -3,21 +3,7 @@ var teamMonitorControllers = angular.module('teamMonitorControllers', []);
 teamMonitorControllers.controller('SprintListCtrl', ['$scope', '$http',
   function ($scope, $http) {
     var data = {
-
-      labels: [
-
-        "Sprint 1",
-        "Sprint 2",
-        "Sprint 3",
-        "Sprint 4",
-        "Sprint 5",
-        "Sprint 6",
-        "Sprint 7",
-        "Sprint 8",
-        "Sprint 9",
-        "Sprint 10",
-      ],
-
+      labels: [],
       datasets: [
 
         {
@@ -26,7 +12,7 @@ teamMonitorControllers.controller('SprintListCtrl', ['$scope', '$http',
           strokeColor: "#e14938",
           highlightFill: "#e14938",
           highlightStroke: "#e14938",
-          data: [13,48]
+          data: []
         },
 
         {
@@ -35,10 +21,21 @@ teamMonitorControllers.controller('SprintListCtrl', ['$scope', '$http',
           strokeColor: "#41a85f",
           highlightFill: "#41a85f",
           highlightStroke: "#41a85f",
-          data: [13,0]
+          data: []
         }
       ]
     };
+
+    $http.get("/api/v1/sprints/")
+      .success(
+        function(response) {
+          for (var i = 0 ; i < response.length ; i++) {
+            data.labels.push('Sprint #' + response[i].index);
+            data.datasets[i].data.push(response[i].promised);
+            data.datasets[i].data.push(response[i].closed);
+          }
+        }
+      );
 
     var ctx = document.getElementById("myChart").getContext("2d");
     var myChart = new Chart(ctx).Bar(data);
