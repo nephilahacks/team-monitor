@@ -49,6 +49,8 @@ teamMonitorControllers.controller('SprintDetailCtrl', [
   '$scope', '$http', '$routeParams', '$interval',
   function($scope, $http, $routeParams, $interval) {
     $scope.sprintId = $routeParams.sprintId;
+    $scope.loadOk = false;
+    $scope.notFound = false;
     var dataSprintOne = {
 
       labels: [
@@ -130,20 +132,36 @@ teamMonitorControllers.controller('SprintDetailCtrl', [
 
     var ctx = document.getElementById("classifica").getContext("2d");
     var finalChart = new Chart(ctx).Bar(dataChart);
+    var stopAutoRefresh;
+    function startAutoRefresh() {
+      stopAutoRefresh = $interval(function(){
+        $http.get("/api/v1/sprints/" + $scope.sprintId)
+          .success(
+            function(response) {
+              updateSprintChart(response);
+            }
+          )
+      }, 3000);
+    }
 
-    var stop = $interval(function(){
-      $http.get("/api/v1/sprints/" + $scope.sprintId)
+    $http.get("/api/v1/sprints/" + $scope.sprintId)
       .success(
         function(response) {
+          $scope.loadOk = true;
           updateSprintChart(response);
+          startAutoRefresh();
         }
-      );
-    }, 3000);
+      )
+      .error(function(data, status, headers, config) {
+        if (status == 404) {
+          $scope.notFound = true;
+        }
+      });
 
     $scope.$on('$destroy', function() {
-      if (angular.isDefined(stop)) {
-        $interval.cancel(stop);
-        stop = undefined;
+      if (angular.isDefined(stopAutoRefresh)) {
+        $interval.cancel(stopAutoRefresh);
+        stopAutoRefresh = undefined;
       }
     });
 

@@ -1,7 +1,9 @@
-#main-wrapper.clearfix
-.canvas-label
-  p Sprint \#{{sprintId}}
-canvas(id="sprintOne", class="canvas-chart")
-.canvas-label
-  p Final chart
-canvas(id="classifica" class="canvas-chart")
+#main-wrapper.clearfix(ng-show="loadOk")
+  .canvas-label
+    p Sprint \#{{sprintId}}
+  canvas(id="sprintOne", class="canvas-chart")
+  .canvas-label
+    p Final chart
+  canvas(id="classifica" class="canvas-chart")
+#sprint-not-found(ng-show="notFound")
+  p Sorry, sprint \#{{sprintId}} not found!
